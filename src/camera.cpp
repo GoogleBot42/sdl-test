@@ -7,6 +7,17 @@ Camera::Camera(float movementScale, float rotationScale, float yFOV, float farCl
 {
 }
 
+void Camera::setLook(const vec3 cameraPosition, const vec3 lookAt)
+{
+    vec3 normLookAt;
+    vec3_dup(position, cameraPosition);
+    vec3_sub(normLookAt, lookAt, position);
+    vec3_norm(normLookAt, normLookAt);
+    rotation[1] = asin(normLookAt[1]);
+    int sign = (normLookAt[2] > 0) ? 1 : -1;
+    rotation[0] = acos(normLookAt[0]/cos(rotation[1])) * sign;
+}
+
 void Camera::handleKeys(int scancode, bool isDown)
 {
     if (scancode == SDL_SCANCODE_W) deltaPosition[2] = movementScale * isDown;

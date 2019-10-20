@@ -65,10 +65,11 @@ public:
 private:
     Camera camera;
     VBO *cubeVbo = nullptr;
-    VBO *colorVbo = nullptr;
     GLSLProgram *program = nullptr;
     VAO *vao = nullptr;
     GLTexture *texture = nullptr;
+
+    vec3 cubePosition = { 7, -3, 2 };
 
     void load() override
     {
@@ -99,6 +100,9 @@ private:
         };
         vao->setAttributePointers(attributes);
         vao->bind();
+
+        vec3 cameraPosition = { 15, 0, 0 };
+        camera.setLook(cameraPosition, cubePosition);
     }
 
     void update(double dt) override
@@ -109,7 +113,7 @@ private:
     void draw() override
     {
         mat4x4 &mvp = camera.calcViewProjection(windowWidth(), windowHeight());
-        mat4x4_translate_in_place(mvp, 7, -1, 1);
+        mat4x4_translate_in_place(mvp, cubePosition[0], cubePosition[1], cubePosition[2]);
         program->setMat4(program->getUniformLocation("mvp"), mvp);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

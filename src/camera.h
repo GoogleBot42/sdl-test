@@ -10,6 +10,8 @@ class Camera {
 public:
     Camera(float movementScale, float rotationScale, float yFOV, float farClip, float nearClip);
 
+    void setLook(const vec3 cameraPosition, const vec3 lookAt);
+
     void handleKeys(int scancode, bool isDown);
     void handleMouse(int dx, int dy);
 
