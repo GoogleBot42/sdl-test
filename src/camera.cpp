@@ -32,6 +32,7 @@ void Camera::updatePosition(double dt)
     calcLook();
     vec3 right, look_without_elevation;
     vec3_mul_cross(right, look, up);
+    vec3_norm(right, right);
     vec3_mul_cross(look_without_elevation, up, right);
     vec3_norm(look_without_elevation, look_without_elevation);
     vec3 deltaUp, deltaRight, deltaForward;
