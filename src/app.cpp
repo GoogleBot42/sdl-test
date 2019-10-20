@@ -17,6 +17,10 @@ Application::Application(const char *title, int width, int height, bool captureM
 
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
+    // Enable multisampling
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+
     window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
     context = SDL_GL_CreateContext(window);
 
