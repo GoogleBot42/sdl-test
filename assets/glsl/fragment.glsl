@@ -1,4 +1,7 @@
-#version 150 core
+#version 300 es 
+
+precision highp float;
+
 uniform sampler2D tex;
 
 in vec3 vertexColor;

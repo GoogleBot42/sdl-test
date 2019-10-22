@@ -40,10 +40,6 @@ void GLSLProgram::addShader(GLuint shaderType, const char *source) {
     glDeleteShader(newShader);
 }
 
-void GLSLProgram::setFragOutputLocation(GLuint colorNum, const char *attributeName) {
-    glBindFragDataLocation(shaderProgram, colorNum, attributeName);
-}
-
 void GLSLProgram::linkProgram() {
     glLinkProgram(shaderProgram);
 

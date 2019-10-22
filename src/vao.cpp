@@ -152,8 +152,8 @@ void VAO::setAttributePointer(const VAOAttribute &attribute, long offset, long s
         glVertexAttribPointer(attribute.location, attribute.size, attribute.type, GL_FALSE, stride, (const void*)offset);
     else if (basicType == GL_INT)
         glVertexAttribIPointer(attribute.location, attribute.size, attribute.type, stride, (const void*)offset);
-    else if (basicType == GL_DOUBLE)
-        glVertexAttribLPointer(attribute.location, attribute.size, GL_DOUBLE, stride, (const void*)offset);
+//    else if (basicType == GL_DOUBLE)
+//        glVertexAttribLPointer(attribute.location, attribute.size, GL_DOUBLE, stride, (const void*)offset);
 
     glVertexAttribDivisor(attribute.location, attribute.divisor);
     glEnableVertexAttribArray(attribute.location);

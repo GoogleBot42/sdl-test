@@ -86,7 +86,6 @@ private:
         std::string fragmentSource = GLSLProgram::readShader("assets/glsl/fragment.glsl");
         program->addShader(GL_VERTEX_SHADER, vertexSource.c_str());
         program->addShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
-        program->setFragOutputLocation(0, "outColor");
         program->linkProgram();
         program->bind();
 
@@ -139,6 +138,10 @@ private:
 
 int main(int argc, char *argv[])
 {
+#ifdef __EMSCRIPTEN__
+    return (new cubeapp)->runMain();
+#else
     return cubeapp().runMain();
+#endif // __EMSCRIPTEN__
 }
 

@@ -19,10 +19,6 @@ public:
     ///
     void addShader(GLuint shaderType, const char *source);
     ///
-    /// \brief Associate an output attribute with a color buffer (not needed if only one output buffer)
-    ///
-    void setFragOutputLocation(GLuint colorNum, const char *attributeName);
-    ///
     /// \brief Links the program.  Call this after all shaders are added and frag outputs are set
     ///
     void linkProgram();

@@ -42,7 +42,12 @@ protected:
     float FPS() { return fps; }
 
 private:
+    void loopIter();
     void handleEvent(const SDL_Event &event);
+
+#ifdef __EMSCRIPTEN__
+    friend void emLoopIterFunc(void *data);
+#endif // __EMSCRIPTEN__
 
     bool impendingQuit;
 

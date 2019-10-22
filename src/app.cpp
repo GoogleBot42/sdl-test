@@ -3,6 +3,11 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten/emscripten.h>
+void emLoopIterFunc(void *data);
+#endif
+
 Application::Application(const char *title, int width, int height, bool captureMouse, bool allowResize)
     : impendingQuit(false), mPosX(0), mPosY(0), mLeft(false), mRight(false), width(width), height(height)
 {
@@ -11,8 +16,9 @@ Application::Application(const char *title, int width, int height, bool captureM
     SDL_Init(SDL_INIT_VIDEO);
 
     // modern opengl
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
@@ -48,25 +54,13 @@ int Application::runMain()
 {
     load();
 
-    SDL_Event event;
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop_arg(emLoopIterFunc, this, 60, 1);
+#else
     while (!impendingQuit) {
-        Uint64 timeNow = SDL_GetPerformanceCounter();
-
-        while (SDL_PollEvent(&event)) {
-            handleEvent(event);
-        }
-
-        double perfFreq = SDL_GetPerformanceFrequency();
-        double dt = ((double)timeNow - timeLast) / perfFreq;
-        fps = 1.0f/(float)dt;
-
-        update(dt);
-        draw();
-
-        SDL_GL_SwapWindow(window);
-
-        timeLast = timeNow;
+        loopIter();
     }
+#endif // __EMSCRIPTEN__
 
     return 0;
 }
@@ -75,6 +69,27 @@ bool Application::keyDown(int scancode)
 {
     if (keys.count(scancode) == 0) keys[scancode] = false;
     return keys[scancode];
+}
+
+void Application::loopIter()
+{
+    Uint64 timeNow = SDL_GetPerformanceCounter();
+
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        handleEvent(event);
+    }
+
+    double perfFreq = SDL_GetPerformanceFrequency();
+    double dt = ((double)timeNow - timeLast) / perfFreq;
+    fps = 1.0f/(float)dt;
+
+    update(dt);
+    draw();
+
+    SDL_GL_SwapWindow(window);
+
+    timeLast = timeNow;
 }
 
 void Application::handleEvent(const SDL_Event &event)
@@ -130,3 +145,10 @@ void Application::handleEvent(const SDL_Event &event)
         }
     }
 }
+
+#ifdef __EMSCRIPTEN__
+void emLoopIterFunc(void *data)
+{
+    static_cast<Application *>(data)->loopIter();
+}
+#endif // __EMSCRIPTEN__
