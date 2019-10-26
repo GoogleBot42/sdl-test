@@ -5,19 +5,20 @@
 
 class Application {
 public:
-    Application(const char *title, int width, int height, bool captureMouse = false, bool allowResize = true);
+    Application(const char *title = "Untitled", int width = 800, int height = 600,
+                bool captureMouse = false, bool allowResize = true);
     virtual ~Application();
 
 protected:
     // Event handling
-    virtual void onMouseMovementEvent(int dx, int dy) {}
+    virtual void onMouseMovement(int dx, int dy) {}
     virtual void onMouseDown(int posX, int posY, bool left) {}
     virtual void onMouseUp(int posX, int posY, bool left) {}
     virtual void onMouseWheel(int dx, int dy) {}
     virtual void onQuitEvent() { quit(); }
     virtual void onKeyUp(int scancode) {}
     virtual void onKeyDown(int scancode) {}
-    virtual void onWindowResizeEvent(int width, int height) {}
+    virtual void onWindowResize(int width, int height) {}
 
     // Runtime callbacks
     virtual void load() {} // called after GL+window is initialized
@@ -32,6 +33,7 @@ protected:
     // Management
     void quit() { impendingQuit = true; }
 
+public:
     // Info
     bool keyDown(int scancode);
     int mouseX() { return mPosX; }

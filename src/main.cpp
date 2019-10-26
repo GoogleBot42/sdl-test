@@ -130,7 +130,7 @@ private:
         camera.handleKeys(scancode, false);
     }
 
-    void onMouseMovementEvent(int dx, int dy) override
+    void onMouseMovement(int dx, int dy) override
     {
         camera.handleMouse(dx, dy);
     }

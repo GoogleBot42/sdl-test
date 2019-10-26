@@ -100,7 +100,7 @@ void Application::handleEvent(const SDL_Event &event)
     case SDL_MOUSEMOTION: {
         mPosX = event.motion.x;
         mPosY = event.motion.y;
-        onMouseMovementEvent(event.motion.xrel, event.motion.yrel);
+        onMouseMovement(event.motion.xrel, event.motion.yrel);
     } break;
     case SDL_MOUSEWHEEL:
         onMouseWheel(event.wheel.x, event.wheel.y);
@@ -140,7 +140,7 @@ void Application::handleEvent(const SDL_Event &event)
             width = event.window.data1;
             height = event.window.data2;
             glViewport(0, 0, width, height);
-            onWindowResizeEvent(width, height);
+            onWindowResize(width, height);
         }
     }
 }
