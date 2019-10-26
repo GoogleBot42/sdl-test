@@ -11,12 +11,11 @@ void emLoopIterFunc(void *data);
 Application::Application(const char *title, int width, int height, bool captureMouse, bool allowResize)
     : impendingQuit(false), mPosX(0), mPosY(0), mLeft(false), mRight(false), width(width), height(height)
 {
-    // setup SDL2 window and OpenGL 4
+    // setup SDL2 window and OpenGL 3 ES
 
     SDL_Init(SDL_INIT_VIDEO);
 
     // modern opengl
-//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
