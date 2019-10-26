@@ -51,8 +51,6 @@ Application::~Application()
 
 int Application::runMain()
 {
-    load();
-
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop_arg(emLoopIterFunc, this, 60, 1);
 #else

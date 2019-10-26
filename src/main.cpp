@@ -53,57 +53,37 @@ float cube_vertices[] = {
 
 class cubeapp : public Application {
 public:
-    cubeapp() : Application("Cube", 1000, 800, true), camera(10, 0.001f, 45, 0.1f, 100) {}
-    ~cubeapp() override
-    {
-        delete cubeVbo;
-        delete program;
-        delete vao;
-        delete texture;
-    }
-
-private:
-    Camera camera;
-    VBO *cubeVbo = nullptr;
-    GLSLProgram *program = nullptr;
-    VAO *vao = nullptr;
-    GLTexture *texture = nullptr;
-
-    vec3 cubePosition = { 7, -3, 2 };
-
-    void load() override
+    cubeapp() : Application("Cube", 1000, 800, true), camera(10, 0.001f, 45, 0.1f, 100)
     {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
 
         // create VBOs
-        cubeVbo = new VBO;
-        cubeVbo->setData(sizeof(cube_vertices), cube_vertices);
+        cubeVbo.setData(sizeof(cube_vertices), cube_vertices);
 
         // shader
-        program = new GLSLProgram;
         std::string vertexSource = GLSLProgram::readShader("assets/glsl/vertex.glsl");
         std::string fragmentSource = GLSLProgram::readShader("assets/glsl/fragment.glsl");
-        program->addShader(GL_VERTEX_SHADER, vertexSource.c_str());
-        program->addShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
-        program->linkProgram();
-        program->bind();
+        program.addShader(GL_VERTEX_SHADER, vertexSource.c_str());
+        program.addShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
+        program.linkProgram();
+        program.bind();
 
         // create VAO
-        vao = new VAO;
-        cubeVbo->bind();
+        cubeVbo.bind();
         VAOAttribute attributes[] = {
-            VAOAttribute(program->getAttributeLocation("position"), GL_FLOAT, 3),
-            VAOAttribute(program->getAttributeLocation("color"), GL_FLOAT, 3),
+            VAOAttribute(program.getAttributeLocation("position"), GL_FLOAT, 3),
+            VAOAttribute(program.getAttributeLocation("color"), GL_FLOAT, 3),
             VAOAttribute::END,
         };
-        vao->setAttributePointers(attributes);
-        vao->bind();
+        vao.setAttributePointers(attributes);
+        vao.bind();
 
         vec3 cameraPosition = { 15, 0, 0 };
         camera.setLook(cameraPosition, cubePosition);
     }
 
+private:
     void update(double dt) override
     {
         camera.updatePosition(dt);
@@ -113,7 +93,7 @@ private:
     {
         mat4x4 &mvp = camera.calcViewProjection(windowWidth(), windowHeight());
         mat4x4_translate_in_place(mvp, cubePosition[0], cubePosition[1], cubePosition[2]);
-        program->setMat4(program->getUniformLocation("mvp"), mvp);
+        program.setMat4(program.getUniformLocation("mvp"), mvp);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 12*3);
@@ -134,6 +114,13 @@ private:
     {
         camera.handleMouse(dx, dy);
     }
+
+    Camera camera;
+    VBO cubeVbo;
+    GLSLProgram program;
+    VAO vao;
+
+    vec3 cubePosition = { 7, -3, 2 };
 };
 
 APPLICATION_MAIN(cubeapp)

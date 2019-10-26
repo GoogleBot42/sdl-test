@@ -21,7 +21,6 @@ protected:
     virtual void onWindowResize(int width, int height) {}
 
     // Runtime callbacks
-    virtual void load() {} // called after GL+window is initialized
     virtual void update(double dt) {}
     virtual void draw() = 0;
 
