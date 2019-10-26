@@ -90,6 +90,16 @@ void Application::loopIter()
     SDL_GL_SwapWindow(window);
 
     timeLast = timeNow;
+
+#ifdef __EMSCRIPTEN__
+    if (impendingQuit) {
+        // quiting is strange in emscripten...
+        // it doesn't seem to destory the rendering window
+        // so clear the screen first
+        glClear(GL_COLOR_BUFFER_BIT);
+        emscripten_cancel_main_loop();
+    }
+#endif // __EMSCRIPTEN__
 }
 
 void Application::handleEvent(const SDL_Event &event)
