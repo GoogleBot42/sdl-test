@@ -53,7 +53,7 @@ float cube_vertices[] = {
 
 class cubeapp : public Application {
 public:
-    cubeapp() : Application("Cube", 800, 600, true), camera(10, 0.001f, 45, 0.1f, 100) {}
+    cubeapp() : Application("Cube", 1000, 800, true), camera(10, 0.001f, 45, 0.1f, 100) {}
     ~cubeapp() override
     {
         delete cubeVbo;
