@@ -66,3 +66,18 @@ private:
 
     std::unordered_map<int, bool> keys;
 };
+
+#ifdef __EMSCRIPTEN__
+// emscripten continues to call our application after main exits so we cannot clean up
+#define APPLICATION_MAIN(my_application) \
+    int main() \
+    { \
+        return (new my_application)->runMain(); \
+    }
+#else
+#define APPLICATION_MAIN(my_application) \
+    int main() \
+    { \
+        return my_application().runMain(); \
+    }
+#endif // __EMSCRIPTEN__

@@ -136,12 +136,4 @@ private:
     }
 };
 
-int main(int argc, char *argv[])
-{
-#ifdef __EMSCRIPTEN__
-    return (new cubeapp)->runMain();
-#else
-    return cubeapp().runMain();
-#endif // __EMSCRIPTEN__
-}
-
+APPLICATION_MAIN(cubeapp)
