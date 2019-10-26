@@ -57,9 +57,7 @@ int Application::runMain()
 #ifdef __EMSCRIPTEN__
     emscripten_set_main_loop_arg(emLoopIterFunc, this, 60, 1);
 #else
-    while (!impendingQuit) {
-        loopIter();
-    }
+    while (!loopIter()) {}
 #endif // __EMSCRIPTEN__
 
     return 0;
@@ -71,7 +69,7 @@ bool Application::keyDown(int scancode)
     return keys[scancode];
 }
 
-void Application::loopIter()
+bool Application::loopIter()
 {
     Uint64 timeNow = SDL_GetPerformanceCounter();
 
@@ -91,15 +89,7 @@ void Application::loopIter()
 
     timeLast = timeNow;
 
-#ifdef __EMSCRIPTEN__
-    if (impendingQuit) {
-        // quiting is strange in emscripten...
-        // it doesn't seem to destory the rendering window
-        // so clear the screen first
-        glClear(GL_COLOR_BUFFER_BIT);
-        emscripten_cancel_main_loop();
-    }
-#endif // __EMSCRIPTEN__
+    return impendingQuit;
 }
 
 void Application::handleEvent(const SDL_Event &event)
@@ -159,6 +149,11 @@ void Application::handleEvent(const SDL_Event &event)
 #ifdef __EMSCRIPTEN__
 void emLoopIterFunc(void *data)
 {
-    static_cast<Application *>(data)->loopIter();
+    Application *application = static_cast<Application *>(data);
+    bool shouldQuit = application->loopIter();
+    if (shouldQuit) {
+        emscripten_cancel_main_loop();
+        delete application; // very gross but possibly the only way to clean up
+    }
 }
 #endif // __EMSCRIPTEN__

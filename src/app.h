@@ -43,7 +43,7 @@ protected:
     float FPS() { return fps; }
 
 private:
-    void loopIter();
+    bool loopIter();
     void handleEvent(const SDL_Event &event);
 
 #ifdef __EMSCRIPTEN__
