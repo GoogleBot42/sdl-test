@@ -17,12 +17,13 @@ protected:
     virtual void onQuitEvent() { quit(); }
     virtual void onKeyUp(int scancode) {}
     virtual void onKeyDown(int scancode) {}
-    virtual bool onWindowResizeEvent(int width, int height) {}
+    virtual void onWindowResizeEvent(int width, int height) {}
 
     // Runtime callbacks
-    virtual void load() {}; // called after GL+window is initialized
-    virtual void update(double dt) {};
+    virtual void load() {} // called after GL+window is initialized
+    virtual void update(double dt) {}
     virtual void draw() = 0;
+
 
 public:
     int runMain();
