@@ -20,12 +20,17 @@ void Camera::setLook(const vec3 cameraPosition, const vec3 lookAt)
 
 void Camera::handleKeys(int scancode, bool isDown)
 {
-    if (scancode == SDL_SCANCODE_W) deltaPosition[2] = movementScale * isDown;
-    if (scancode == SDL_SCANCODE_S) deltaPosition[2] = -1 * movementScale * isDown;
-    if (scancode == SDL_SCANCODE_A) deltaPosition[0] = -1 * movementScale * isDown;
-    if (scancode == SDL_SCANCODE_D) deltaPosition[0] = movementScale * isDown;
-    if (scancode == SDL_SCANCODE_Q || scancode == SDL_SCANCODE_LSHIFT) deltaPosition[1] = -1 * movementScale * isDown;
-    if (scancode == SDL_SCANCODE_E || scancode == SDL_SCANCODE_SPACE) deltaPosition[1] = movementScale * isDown;
+    if (scancode == SDL_SCANCODE_W || scancode == SDL_SCANCODE_UP) keyState[0] = isDown;
+    else if (scancode == SDL_SCANCODE_S || scancode == SDL_SCANCODE_DOWN) keyState[1] = isDown;
+    else if (scancode == SDL_SCANCODE_D || scancode == SDL_SCANCODE_RIGHT) keyState[2] = isDown;
+    else if (scancode == SDL_SCANCODE_A || scancode == SDL_SCANCODE_LEFT) keyState[3] = isDown;
+    else if (scancode == SDL_SCANCODE_E || scancode == SDL_SCANCODE_SPACE) keyState[4] = isDown;
+    else if (scancode == SDL_SCANCODE_Q || scancode == SDL_SCANCODE_LSHIFT) keyState[5] = isDown;
+    else return;
+
+    deltaPosition[2] = movementScale * (keyState[0] - keyState[1]);
+    deltaPosition[0] = movementScale * (keyState[2] - keyState[3]);
+    deltaPosition[1] = movementScale * (keyState[4] - keyState[5]);
 }
 
 void Camera::handleMouse(int dx, int dy)

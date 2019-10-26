@@ -31,4 +31,8 @@ private:
     float movementScale, rotationScale;
     float yFOV;
     float farClip, nearClip;
+
+    // keystate of each direction of travel
+    // forward, backward, right, left, up, down
+    int keyState[6] = { 0, 0, 0, 0, 0, 0 };
 };
